@@ -16,8 +16,6 @@ This repository is part of a **multi-repository platform architecture**.
   <img src="./images/architecture-phase1.png" width="80%" alt="Architecture Diagram">
 </p>
 
-</details>
-
 ---
 
 # 🛡 Secure DevSecOps Pipeline
@@ -25,7 +23,7 @@ This repository is part of a **multi-repository platform architecture**.
 <details>
 <summary><b>Click to view Architecture Flow</b></summary>
 
-````mermaid
+```mermaid
 graph TD
 
 A[Developer Commit] --> B[GitHub Actions CI]
@@ -49,9 +47,9 @@ style G fill:#ff9900,stroke:#333,stroke-width:2px
 style I fill:#ef7b4d,stroke:#333,stroke-width:2px
 style J fill:#326ce5,stroke:#333,stroke-width:2px
 style L fill:#00ff00,stroke:#333,stroke-width:4px
+```
 
 </details>
-
 
 Infrastructure provisioning for the above architecture is handled in this repository.
 
@@ -134,6 +132,8 @@ The Terraform modules provision the following core components.
 
 <details>
 <summary><b>View Project Structure</b></summary>
+
+```
 platform-infra/
 ├── modules/                # Reusable Terraform/IaC components
 │   ├── vpc/                # Network stack
@@ -153,6 +153,7 @@ platform-infra/
 ├── scripts/                # Helper automation scripts
 │
 └── docs/                   # Architecture docs, ADRs and guides
+```
 
 </details>
 
@@ -218,7 +219,7 @@ Infrastructure provisioning is executed using the Makefile.
 
 ```bash
 make init ENV=dev
-````
+```
 
 ### Generate Execution Plan
 
@@ -253,7 +254,8 @@ Environment configuration is located under:
 environments/<environment>
 ```
 
-Terraform State Management
+## Terraform State Management
+
 Terraform state is stored remotely to ensure safe collaboration.
 Backend resources are created using the bootstrap configuration located in:
 
@@ -262,32 +264,37 @@ global/bootstrap
 ```
 
 This includes:
-S3 backend bucket
-DynamoDB table (for state locking)
 
-### Platform Bootstrap
+- S3 backend bucket
+- DynamoDB table (for state locking)
+
+## Platform Bootstrap
 
 Once infrastructure is provisioned, the cluster bootstrap installs:
-• Argo CD — GitOps continuous delivery
-• Kyverno — policy enforcement engine
+
+- **Argo CD** — GitOps continuous delivery
+- **Kyverno** — policy enforcement engine
 
 These components enable secure GitOps-based application deployments managed by the platform-gitops repository.
 
-### Operational Principles
+## Operational Principles
 
 This repository follows the following platform engineering practices:
-• Modular Terraform architecture
-• Immutable infrastructure
-• GitOps deployment model
-• Policy-driven security
-• Least-privilege IAM design
-• Automated CI/CD pipelines
 
-### Related Repositories
+- Modular Terraform architecture
+- Immutable infrastructure
+- GitOps deployment model
+- Policy-driven security
+- Least-privilege IAM design
+- Automated CI/CD pipelines
+
+## Related Repositories
 
 | Repository          | Status                                 | Description                                   |
 | :------------------ | :------------------------------------- | :-------------------------------------------- |
-| **platform-gitops** | ![In Progress](https://img.shields.io) | Kubernetes manifests and GitOps configuration |
+| **platform-gitops** | Pending | Kubernetes manifests and GitOps configuration |
+
+---
 
 # License
 

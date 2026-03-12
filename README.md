@@ -16,31 +16,42 @@ This repository is part of a **multi-repository platform architecture**.
   <img src="./images/architecture-phase1.png" width="80%" alt="Architecture Diagram">
 </p>
 
-### 🛡️ Secure DevSecOps Pipeline
+</details>
+
+---
+
+# 🛡 Secure DevSecOps Pipeline
 
 <details>
 <summary><b>Click to view Architecture Flow</b></summary>
 
+````mermaid
 graph TD
-A[Developer Commit] --> B[GitHub Actions CI]
-subgraph CI Process
-B --> C[Build & Scan]
-C --> D[SBOM & Sign]
-end
-D --> E[Amazon ECR Signed Images]
-E --> F[GitOps Repository Desired State]
-F --> G[Argo CD Continuous Delivery]
-G --> H[EKS Cluster]
-H --> I[Kyverno Admission Policies]
-I --> J[Secure Workload Deployment]
 
-    style B fill:#f9f,stroke:#333,stroke-width:2px
-    style E fill:#ff9900,stroke:#333,stroke-width:2px
-    style G fill:#ef7b4d,stroke:#333,stroke-width:2px
-    style H fill:#326ce5,stroke:#333,stroke-width:2px
-    style J fill:#00ff00,stroke:#333,stroke-width:4px
+A[Developer Commit] --> B[GitHub Actions CI]
+
+subgraph CI Pipeline
+B --> C[Build Container]
+C --> D[Security Scans]
+D --> E[Generate SBOM]
+E --> F[Sign Image with Cosign]
+end
+
+F --> G[Amazon ECR Signed Images]
+G --> H[GitOps Repository Desired State]
+H --> I[Argo CD Continuous Delivery]
+I --> J[EKS Cluster]
+J --> K[Kyverno Admission Policies]
+K --> L[Secure Workload Deployment]
+
+style B fill:#f9f,stroke:#333,stroke-width:2px
+style G fill:#ff9900,stroke:#333,stroke-width:2px
+style I fill:#ef7b4d,stroke:#333,stroke-width:2px
+style J fill:#326ce5,stroke:#333,stroke-width:2px
+style L fill:#00ff00,stroke:#333,stroke-width:4px
 
 </details>
+
 
 Infrastructure provisioning for the above architecture is handled in this repository.
 
@@ -119,26 +130,29 @@ The Terraform modules provision the following core components.
 
 ---
 
-# Repository Structure
+# 📂 Repository Structure
 
 <details>
-<summary><b>📂 View Project Structure</b></summary>
-
+<summary><b>View Project Structure</b></summary>
 platform-infra/
-├── modules/ # Reusable Terraform/IAC components
-│ ├── vpc/ # Network stack
-│ ├── eks/ # Kubernetes cluster
-│ ├── ecr/ # Container registry
-│ ├── github-oidc/ # Authentication for CI/CD
-│ ├── argocd/ # CD Controller
-│ └── kyverno/ # Policy engine
-├── environments/ # Environment-specific configs
-│ ├── dev/
-│ └── prod/
-├── global/ # Cross-environment resources
-│ └── bootstrap/ # Initial setup (S3/DynamoDB)
-├── scripts/ # Helper automation
-└── docs/ # Architecture & Guides
+├── modules/                # Reusable Terraform/IaC components
+│   ├── vpc/                # Network stack
+│   ├── eks/                # Kubernetes cluster
+│   ├── ecr/                # Container registry
+│   ├── github-oidc/        # Authentication for CI/CD
+│   ├── argocd/             # GitOps CD controller
+│   └── kyverno/            # Kubernetes policy engine
+│
+├── environments/           # Environment-specific infrastructure
+│   ├── dev/
+│   └── prod/
+│
+├── global/                 # Cross-environment resources
+│   └── bootstrap/          # Terraform backend (S3 + DynamoDB)
+│
+├── scripts/                # Helper automation scripts
+│
+└── docs/                   # Architecture docs, ADRs and guides
 
 </details>
 
@@ -204,7 +218,7 @@ Infrastructure provisioning is executed using the Makefile.
 
 ```bash
 make init ENV=dev
-```
+````
 
 ### Generate Execution Plan
 
@@ -271,10 +285,9 @@ This repository follows the following platform engineering practices:
 
 ### Related Repositories
 
-| Repository          | Status                                        | Description                                   |
-| :------------------ | :-------------------------------------------- | :-------------------------------------------- |
-| **platform-gitops** | ![GitHub last commit](https://img.shields.io) | Kubernetes manifests and GitOps configuration |
-
+| Repository          | Status                                 | Description                                   |
+| :------------------ | :------------------------------------- | :-------------------------------------------- |
+| **platform-gitops** | ![In Progress](https://img.shields.io) | Kubernetes manifests and GitOps configuration |
 
 # License
 
@@ -286,11 +299,13 @@ This project is part of the **thezxcvbnm.online engineering portfolio** and demo
 Permission is granted to view, study, and learn from the source code for educational and non-commercial purposes.
 
 You may:
+
 - review and study the implementation
 - use the ideas and architecture for learning or inspiration
 - reference this repository for educational purposes
 
 You may **not**:
+
 - redistribute this repository as your own work
 - use the code or materials for commercial products or services without permission
 - remove or alter the copyright notice

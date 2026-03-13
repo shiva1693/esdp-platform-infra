@@ -4,19 +4,18 @@ variable "project_name" {
   default     = "esdp-platform-infra" // Enterprise Secure Delivery Platform (ESDP)
 }
 
-variable "tags" {
-    description = "A map of tags to add to all resources"
-    type        = map(string)
-    default     = {}    
+variable "region" {
+  description = "AWS region for backend resources"
+  type        = string
 }
 
-locals{
-    common_tags =merge(
-        {
-            Project = var.project_name
-            ManagedBy = "Terraform"
-            Environment = "dev"
-        },
-        var.tags
-    )
+variable "tf_state_bucket" {
+  description = "S3 bucket name for Terraform remote state"
+  type        = string
+}
+
+variable "tags" {
+  description = "Common tags for the backend resources"
+  type        = map(string)
+  default     = {}
 }

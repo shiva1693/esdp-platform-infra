@@ -1,31 +1,26 @@
 # Terraform
-.terraform/
+**/.terraform/*
 *.tfstate
 *.tfstate.*
 crash.log
-
-# Terraform lock
-.terraform.lock.hcl
-
-# mac
-.DS_Store
-
-# plan files
-*.tfplan
-
-# Exclude all .tfvars files, which are likely to contain sensitive data
-*.tfvars
-*.tfvars.json
-
-# Ignore override files as they are usually used to override resources locally
+crash.*.log
 override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
 
-# Ignore CLI configuration files
-.terraformrc
-terraform.rc
+# Terraform plan files
+*.tfplan
+plan.out
 
-# kube config
+# Variable files that may contain secrets
+*.tfvars
+*.tfvars.json
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Misc
 kubeconfig

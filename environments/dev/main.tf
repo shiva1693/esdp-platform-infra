@@ -16,16 +16,30 @@ module "tags" {
 }
 
 module "vpc" {
-  source  = "../../modules/vpc"
-  name_prefix  = module.naming.name_prefix
-  tags   = module.tags.tags
-  vpc_cidr   = var.vpc_cidr
-  availability_zones = var.availability_zones
+  source               = "../../modules/vpc"
+  name_prefix          = module.naming.name_prefix
+  tags                 = module.tags.tags
+  vpc_cidr             = var.vpc_cidr
+  availability_zones   = var.availability_zones
   public_subnet_cidrs  = var.public_subnet_cidrs
   private_subnet_cidrs = var.private_subnet_cidrs
   single_nat_gateway   = var.single_nat_gateway
+}
 
+module "vpc_flow_logs" {
+  source      = "../../modules/vpc-flow-logs"
+  name_prefix = module.naming.name_prefix
+  tags        = module.tags.tags
+  vpc_id      = module.vpc.vpc_id
+}
 
-
-
+module "vpc_endpoints" {
+  source      = "../../modules/vpc-endpoints"
+  name_prefix = module.naming.name_prefix
+  tags        = module.tags.tags
+  vpc_id      = module.vpc.vpc_id
+  route_table_ids = concat(
+    [module.vpc.public_route_table_id],
+    module.vpc.private_route_table_ids
+  )
 }

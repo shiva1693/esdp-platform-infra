@@ -22,7 +22,7 @@ validate:
 	cd $(TF_ROOT) && terraform validate
 
 plan:
-	cd $(TF_ROOT) && terraform plan -var-file=terraform.tfvars
+	cd $(TF_ROOT) && terraform plan -var-file=terraform.tfvars -out=tfplan
 
 apply:
 	cd $(TF_ROOT) && terraform apply -var-file=terraform.tfvars

@@ -43,3 +43,12 @@ module "vpc_endpoints" {
     module.vpc.private_route_table_ids
   )
 }
+
+module "kms" {
+  source = "../../modules/kms"
+
+  name_prefix = module.naming.name_prefix
+  alias_name  = "platform"
+  description = "KMS key for Enterprise Secure Delivery Platform resources"
+  tags        = module.tags.tags
+}

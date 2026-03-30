@@ -1,6 +1,6 @@
 resource "aws_cloudwatch_log_group" "flow_logs" {
-  name               = "/aws/vpc/${var.name_prefix}-flow-logs"
-  retention_in_days  = var.log_retention_in_days
+  name              = "/aws/vpc/${var.name_prefix}-flow-logs"
+  retention_in_days = var.log_retention_in_days
 
   tags = merge(var.tags, {
     Name = "${var.name_prefix}-flow-logs"

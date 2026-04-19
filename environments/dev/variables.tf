@@ -47,3 +47,31 @@ variable "single_nat_gateway" {
   default = true
 }
 
+variable "ci_role_arn" {
+  description = "GitHub Actions CI IAM role ARN"
+  type        = string
+  default     = ""
+}
+
+variable "eks_node_role_arn" {
+  description = "EKS node IAM role ARN"
+  type        = string
+  default     = ""
+}
+
+variable "github_repos" {
+  description = "GitHub repos allowed to assume CI role"
+  type        = list(string)
+}
+
+variable "github_branch" {
+  description = "GitHub branch allowed to assume CI role"
+  type        = string
+  default     = ""
+}
+
+variable "ecr_repository_name" {
+  description = "ECR repository name"
+  type        = string
+  default     = "app"
+}

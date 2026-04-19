@@ -34,3 +34,23 @@ output "kms_key_arn" {
 output "kms_alias_name" {
   value = module.kms.alias_name
 }
+
+output "ecr_repository_url" {
+  description = "ECR repository URL"
+  value       = module.ecr.repository_url
+}
+
+output "ci_role_arn" {
+  description = "CI role ARN"
+  value       = module.github_oidc.ci_role_arn
+}
+
+output "eks_node_role_arn" {
+  description = "EKS node role ARN"
+  value       = module.github_oidc.eks_node_role_arn
+}
+
+output "github_oidc_provider_arn" {
+  description = "ARN of the GitHub OIDC provider created in this module"
+  value       = module.github_oidc.github_oidc_provider_arn
+}

@@ -14,6 +14,11 @@ variable "tf_state_bucket" {
   type        = string
 }
 
+variable "account_regional_namespace_suffix" {
+  description = "Account and regional namespace suffix for globally unique bucket naming"
+  type        = string
+}
+
 variable "tags" {
   description = "Common tags for the backend resources"
   type        = map(string)

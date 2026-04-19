@@ -21,7 +21,7 @@ locals {
 }
 
 resource "aws_s3_bucket" "tf_state_bucket" {
-  bucket        = var.tf_state_bucket
+  bucket        = "${var.tf_state_bucket}-${var.account_regional_namespace_suffix}"
   force_destroy = false
 
   tags = merge(local.common_tags, {

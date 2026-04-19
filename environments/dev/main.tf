@@ -52,3 +52,25 @@ module "kms" {
   description = "KMS key for Enterprise Secure Delivery Platform resources"
   tags        = module.tags.tags
 }
+
+module "github_oidc" {
+  source      = "../../modules/github-oidc"
+  name_prefix = module.naming.name_prefix
+  tags        = module.tags.tags
+
+  github_repos       = var.github_repos
+  github_branch      = var.github_branch
+  ecr_repository_arn = module.ecr.repository_arn
+  kms_key_arn        = module.kms.key_arn
+}
+
+module "ecr" {
+  source              = "../../modules/ecr"
+  repository_name     = var.ecr_repository_name
+  ecr_repository_name = var.ecr_repository_name
+  name_prefix         = module.naming.name_prefix
+  tags                = module.tags.tags
+  kms_key_arn         = module.kms.key_arn
+  ci_role_arn         = module.github_oidc.ci_role_arn
+  eks_node_role_arn   = module.github_oidc.eks_node_role_arn
+}

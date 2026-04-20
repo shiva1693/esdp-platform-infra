@@ -72,5 +72,5 @@ module "ecr" {
   tags                = module.tags.tags
   kms_key_arn         = module.kms.key_arn
   ci_role_arn         = module.github_oidc.ci_role_arn
-  eks_node_role_arn   = module.github_oidc.eks_node_role_arn
+  # eks_node_role_arn   = module.github_oidc.eks_node_role_arn
 }

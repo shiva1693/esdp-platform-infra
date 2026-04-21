@@ -1,26 +1,26 @@
-# locals {
-#   # This is OIDC URL for GitHub Actions, it is used in the trust relationship of the IAM role to allow \
-#   # GitHub Actions to assume the role
-#   github_oidc_url = "https://token.actions.githubusercontent.com"
+locals {
+  # This is OIDC URL for GitHub Actions, it is used in the trust relationship of the IAM role to allow \
+  # GitHub Actions to assume the role
+  github_oidc_url = "https://token.actions.githubusercontent.com"
 
-#   allowed_subjects = [
-#     for repo in var.github_repos :
-#     "${repo}:ref:refs/heads/${var.github_branch}"
-#   ]
+  allowed_subjects = [
+    for repo in var.github_repos :
+    "${repo}:ref:refs/heads/${var.github_branch}"
+  ]
 
-#   eks_assume_role_policy = jsonencode({
-#     Version = "2012-10-17"
-#     Statement = [
-#       {
-#         Effect = "Allow"
-#         Principal = {
-#           Service = "ec2.amazonaws.com"
-#         }
-#         Action = "sts:AssumeRole"
-#       }
-#     ]
-#   })
-# }
+  # eks_assume_role_policy = jsonencode({
+  #   Version = "2012-10-17"
+  #   Statement = [
+  #     {
+  #       Effect = "Allow"
+  #       Principal = {
+  #         Service = "ec2.amazonaws.com"
+  #       }
+  #       Action = "sts:AssumeRole"
+  #     }
+  #   ]
+  # })
+}
 
 # OIDC Provider
 data "tls_certificate" "github" {

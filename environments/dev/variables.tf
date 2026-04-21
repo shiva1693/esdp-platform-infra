@@ -42,6 +42,12 @@ variable "private_subnet_cidrs" {
   type = list(string)
 }
 
+variable "pod_subnet_cidrs" {
+  description = "CIDR blocks for dedicated pod subnets"
+  type        = list(string)
+  default     = []
+}
+
 variable "single_nat_gateway" {
   type    = bool
   default = true
@@ -75,3 +81,4 @@ variable "ecr_repository_name" {
   type        = string
   default     = "app"
 }
+

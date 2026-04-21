@@ -36,3 +36,15 @@ variable "single_nat_gateway" {
   type        = bool
   default     = true
 }
+
+variable "pod_subnet_cidrs" {
+  description = "CIDR blocks for dedicated pod subnets, one per AZ. Using /19 to ensure enough pod Ips and avoid IP overlpa with Node Ips"
+  type        = list(string)
+  default     = []
+}
+
+variable "cluster_name" {
+  description = "EKS cluster name used for Kubernetes subnet discovery tags."
+  type        = string
+  default     = ""
+}

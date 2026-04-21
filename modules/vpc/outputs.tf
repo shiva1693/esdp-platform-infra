@@ -15,7 +15,19 @@ output "public_subnet_ids" {
 
 output "private_subnet_ids" {
   value       = aws_subnet.private_subnet[*].id
-  description = "Private Subnet Ids"
+  description = "Private Subnet Ids, this is for Node IPs only for EKS nodes"
+}
+
+# Mapping AZ → pod subnet ID
+# Used by EKS module for ENIConfig — must know which subnet per AZ
+output "pod_subnet_ids_by_az" {
+  description = "Map of availability zone to pod subnet ID used for VPC CNI ENIConfig"
+  value       = { for az, subnet in aws_subnet.pod_subnet : az => subnet.id }
+}
+
+output "pod_subnet_ids" {
+  description = "List of pod subnet IDs"
+  value       = values(aws_subnet.pod_subnet)[*].id
 }
 
 output "nat_gateway_ids" {

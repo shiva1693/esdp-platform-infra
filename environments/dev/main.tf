@@ -15,6 +15,15 @@ module "tags" {
   cost_center = var.cost_center
 }
 
+module "kms" {
+  source = "../../modules/kms"
+
+  name_prefix = module.naming.name_prefix
+  alias_name  = "platform"
+  description = "KMS key for Enterprise Secure Delivery Platform resources"
+  tags        = module.tags.tags
+}
+
 module "vpc" {
   source               = "../../modules/vpc"
   name_prefix          = module.naming.name_prefix
@@ -44,24 +53,20 @@ module "vpc_endpoints" {
   )
 }
 
-module "kms" {
-  source = "../../modules/kms"
-
+module "iam" {
+  source      = "../../modules/iam"
   name_prefix = module.naming.name_prefix
-  alias_name  = "platform"
-  description = "KMS key for Enterprise Secure Delivery Platform resources"
   tags        = module.tags.tags
+  kms_key_arn = module.kms.key_arn
 }
 
 module "github_oidc" {
-  source      = "../../modules/github-oidc"
-  name_prefix = module.naming.name_prefix
-  tags        = module.tags.tags
-
-  github_repos       = var.github_repos
-  github_branch      = var.github_branch
-  ecr_repository_arn = module.ecr.repository_arn
-  kms_key_arn        = module.kms.key_arn
+  source        = "../../modules/github-oidc"
+  name_prefix   = module.naming.name_prefix
+  tags          = module.tags.tags
+  kms_key_arn   = module.kms.key_arn
+  github_repos  = var.github_repos
+  github_branch = var.github_branch
 }
 
 module "ecr" {
@@ -71,4 +76,6 @@ module "ecr" {
   name_prefix         = module.naming.name_prefix
   tags                = module.tags.tags
   kms_key_arn         = module.kms.key_arn
+  ci_role_arn         = module.github_oidc.ci_role_arn
+  eks_node_role_arn   = module.iam.eks_node_role_arn
 }

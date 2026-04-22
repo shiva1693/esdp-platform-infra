@@ -7,19 +7,6 @@ locals {
     for repo in var.github_repos :
     "${repo}:ref:refs/heads/${var.github_branch}"
   ]
-
-  # eks_assume_role_policy = jsonencode({
-  #   Version = "2012-10-17"
-  #   Statement = [
-  #     {
-  #       Effect = "Allow"
-  #       Principal = {
-  #         Service = "ec2.amazonaws.com"
-  #       }
-  #       Action = "sts:AssumeRole"
-  #     }
-  #   ]
-  # })
 }
 
 # OIDC Provider
@@ -91,7 +78,7 @@ data "aws_iam_policy_document" "ci_permissions" {
       "ecr:GetDownloadUrlForLayer",
       "ecr:BatchGetImage"
     ]
-    resources = [var.ecr_repository_arn]
+    resources = ["arn:aws:ecr:*:*:repository/${var.name_prefix}-*"]
   }
 
   statement {
@@ -111,72 +98,3 @@ resource "aws_iam_role_policy" "ci_permissions" {
   role   = aws_iam_role.ci.id
   policy = data.aws_iam_policy_document.ci_permissions.json
 }
-
-# EKS Node Role -> EC2 nodes assumes this
-# resource "aws_iam_role" "eks_node" {
-#   name               = "${var.name_prefix}-eks-node-role"
-#   assume_role_policy = local.eks_assume_role_policy
-
-#   tags = merge(var.tags, {
-#     Name = "${var.name_prefix}-eks-node-role"
-#   })
-# }
-
-# EKS node Role Policy -> what EC2 nodes can do
-# data "aws_iam_policy_document" "eks_node_permissions" {
-#   statement {
-#     sid    = "ECRAuth"
-#     effect = "Allow"
-#     actions = [
-#       "ecr:GetAuthorizationToken"
-#     ]
-#     resources = ["*"]
-#   }
-
-#   statement {
-#     sid    = "ECRPull"
-#     effect = "Allow"
-#     actions = [
-#       "ecr:GetDownloadUrlForLayer",
-#       "ecr:BatchGetImage",
-#       "ecr:BatchCheckLayerAvailability"
-#     ]
-#     resources = [var.ecr_repository_arn]
-#   }
-
-#   statement {
-#     sid    = "KMSforECR"
-#     effect = "Allow"
-#     actions = [
-#       "kms:Decrypt",
-#       "kms:DescribeKey"
-#     ]
-#     resources = [var.kms_key_arn]
-#   }
-# }
-
-# resource "aws_iam_role_policy" "eks_node_permissions" {
-#   name   = "${var.name_prefix}-eks-node-policy"
-#   role   = aws_iam_role.eks_node.id
-#   policy = data.aws_iam_policy_document.eks_node_permissions.json
-# }
-
-# # Attach AWS managed policies for EKS nodes
-# resource "aws_iam_role_policy_attachment" "eks_node_managed" {
-#   role       = aws_iam_role.eks_node.name
-#   policy_arn = each.value
-#   for_each = toset([
-#     "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
-#     "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
-#     "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-#   ])
-# }
-
-# resource "aws_iam_instance_profile" "eks_node" {
-#   name = "${var.name_prefix}-eks-node-profile"
-#   role = aws_iam_role.eks_node.name
-
-#   tags = merge(var.tags, {
-#     Name = "${var.name_prefix}-eks-node-profile"
-#   })
-# }

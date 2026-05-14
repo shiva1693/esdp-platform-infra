@@ -19,7 +19,7 @@ output "private_subnet_ids" {
 }
 
 # Mapping AZ → pod subnet ID
-# Used by EKS module for ENIConfig — must know which subnet per AZ
+# Used by EKS module for ENIConfig, must know which subnet per AZ
 output "pod_subnet_ids_by_az" {
   description = "Map of availability zone to pod subnet ID used for VPC CNI ENIConfig"
   value       = { for az, subnet in aws_subnet.pod_subnet : az => subnet.id }
